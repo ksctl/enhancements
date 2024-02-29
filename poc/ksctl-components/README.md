@@ -1,4 +1,4 @@
-# about ksctl components
+# about ksctl events driven architecture using k8s operators
 
 should we create crd for only autoscaler or a generic crd for all the ksctl tasks and make it such that it can accomodate all
 
@@ -23,6 +23,10 @@ for **Uninstalling**
 
 as of now plan for the ksctl agent will be having a controller for getting latest changes
 from the above types
+
+## check the design
+
+![Design link](./design-proposal.svg)
 
 ## AutoScaler controller
 
