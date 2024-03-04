@@ -37,12 +37,15 @@ It is also responsible for calling the functionality for it.
 ## How do we know when to scale up
 
 1. We check **pod pressure** via the Spec.Status.Condition[\...\]
-> **Note**: Pod pressure is calculated by checking the number of pending pods in the cluster and seeing if the current nodes in the cluster can schedule it. If not, new nodes need to be added to the cluster.
+> [!Note]
+> Pod pressure is calculated by checking the number of pending pods in the cluster and seeing if the current nodes in the cluster can schedule it. If not, new nodes need to be added to the cluster.
 
 ## How do we know when to scale down
 Factors we are lokking forward:
 1. **Underutilization Nodes `PRIMARY`**: resource usage is sum(resource_requests) / node_allocatable (not yet decided how!); It has nothing to do with "real" utilization
-> **Note**: if it's underutilized over a certain period. This involves checking if the node's CPU, memory, and other resources are not being effectively used by the pods scheduled on it.
+> [!Note]
+> if it's underutilized over a certain period. This involves checking if the node's CPU, memory, and other resources are not being effectively used by the pods scheduled on it.
+
 2. **Health Status**: Nodes experiencing issues or deemed unhealthy based on specific criteria might be terminated to maintain the overall health of the cluster
 3. **Cost Efficiency**: for it to work we need to add node labels so that we can determine which node is of higher specs or we can also do use the avail mem and cpu resources.  (for instance, larger nodes that are underutilized) might be targeted for termination to reduce costs.
 
@@ -67,6 +70,6 @@ If the cluster needs to be scaled up, ksctl agent will do it.
 
 - Cloud resource will be created (worker plane VMs).
 - Use KubeAdm or K3S to bootstrap the above VM.
-> **Note**
+> [!Note]
 > We need the latest cluster token to add a new VM to the existing cluster.
 > we can fetch the latest token by ssh into controlplane-0 and then use to join the Worker Plane.
