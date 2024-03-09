@@ -73,3 +73,41 @@ If the cluster needs to be scaled up, ksctl agent will do it.
 > [!Note]
 > We need the latest cluster token to add a new VM to the existing cluster.
 > we can fetch the latest token by ssh into controlplane-0 and then use to join the Worker Plane.
+
+## Implementation
+
+> [!Note] Currently the logic is focused on upscaling the cluster under pressure. DownScaling will be handled in the next iteration.
+
+### Resource One
+- stores information of Pod pressure per node
+
+### Controller One
+- Watches for Pods Resources
+- Calculates the Pod Pressure
+- Writes the Pod pressure to Resource One
+
+#### Tests
+
+- [ ] Does it get triggered whenever pod resource Change ?
+- [ ] Does it calculate correct pod pressure values ?
+- [ ] Does it successfully write the updated pod pressures in Resource One ?
+- [ ] If Resource One gets deleted, does Controller One recreate it ?
+- [ ] Is the information correctly replicated by Controller One ?
+
+### Controller Two
+- Watches Resource One
+- Triggers the autoscaling logic if Pod pressure is above threshold value.
+
+#### Tests
+- [ ] Does it get triggered when Resource One changes ?
+- [ ] Does it trigger AutoScaler when Pod Pressure above threshold value ?
+- [ ] TODO
+
+### AutoScaler logic
+- Creates a new Node.
+- Adds the new Node to the Cluster
+
+#### Tests
+- [ ] Does it recieve messages from Controller Two ?
+- [ ] Does it succesfully create a new Node if needed ?
+- [ ] Does it successfully merge the new node into the cluster ?
