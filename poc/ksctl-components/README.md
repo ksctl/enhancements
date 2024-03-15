@@ -28,6 +28,12 @@ from the above types
 
 ![Design link](./design-proposal.svg)
 
-## AutoScaler controller
+![New Event Archtecture](./design-of-event-driven-k8s-ksctl.svg)
 
-Refer to this doc [Link](./autoScalerController/idea.md)
+## AutoScaler design
+
+Refer to this doc [Link](./design-autoscaler.md)
+
+## Ksctl Component
+
+Refer this [Link](./design-ksctl-agent.md)
