@@ -3,7 +3,7 @@
 ## Purpose
 we need to generate etcd for external datastore with tls and also test out kubeadm as well
 
-> **Note**
+> [!Note]
 > - client connection is self-signed tls
 > - peer connection is auto-tls
 
@@ -16,8 +16,8 @@ we need to generate etcd for external datastore with tls and also test out kubea
 - [kubeadm-install](https://gist.github.com/saiyam1814/d87598cf55c71953e288cd22858c0593)
 - [Refer-kubeadm-config.v1beta3](https://kubernetes.io/docs/reference/config-api/kubeadm-config.v1beta3/)
 
-> **Note**
-There is configuration for the data-sir and WAL directory in etcd
+> [!TIP]
+There is configuration for the data-dir and WAL directory in etcd
 
 ## Work
 
