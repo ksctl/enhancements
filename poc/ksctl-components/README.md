@@ -1,6 +1,11 @@
 # ksctl events driven architecture using k8s operators
 
 ## Why are we building this?
+ksctl aims to simplify the kubernetes cluster management
+we are starting to provide support more advance features like cluster state, 
+cluster health, production ready application stack, many more
+for these we require close integration with the 
+kubernetes api server what is the better place than controller manager Hooks
 
 
 the domain is `ksctl.com`

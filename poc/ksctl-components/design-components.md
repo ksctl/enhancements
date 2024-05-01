@@ -37,6 +37,28 @@ spec:
   Succeded: !bool false
 ```
 
+it basically relies on storageDriver.Export and .Import methods
+
+```py
+if storage == "external.group":
+  # we just need to extract the credentials
+elif storage == "internal.group":
+  # we need to perform storage.Export()
+  # both the state and any cloud credentials which were used
+```
+
+![Import and export diagram](./storage-import-export.svg)
+
+> [!NOTE]
+> For internal.group aka local:
+> once these are done we can load them in the spec.rawData[]
+> and apply the crd and the controller will load the ksctl agent client conn
+> and the ksctl agent will perform storage.Import()
+
+
+for this feature to work we also have to add another storage driver (kubernetes)
+
+![Diagram](./storage-kubernetes.svg)
 
 ### LoadBalancer Provisioning
 
