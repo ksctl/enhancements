@@ -1,6 +1,6 @@
 # Jsonnet
 
 ```shell
-jsonnet main.jsonnet | kubectl apply -f -
+jsonnet -V 'environment=production' main.jsonnet | kubectl apply -f -
 ```
 

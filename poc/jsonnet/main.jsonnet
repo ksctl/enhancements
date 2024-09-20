@@ -3,8 +3,13 @@ local service = import 'lib/service.libsonnet';
 local configmap = import 'lib/configmap.libsonnet';
 local secret = import 'lib/secret.libsonnet';
 
-local appName = 'my-web-app';
-local appPort = 8080;
+local appName = 'ksctl-poc-nginx-jsonnet';
+local appPort = 80;
+
+local commonLabels = {
+  'app.kubernetes.io/name': appName,
+  'app.kubernetes.io/instance': appName + '-' + std.extVar('environment'),
+};
 
 local myDeployment = deployment.createDeployment(
   appName,
@@ -18,7 +23,8 @@ local myDeployment = deployment.createDeployment(
         containerPort: appPort,
       },
     ],
-  }]
+  }],
+  commonLabels + { 'app.kubernetes.io/component': 'web' }
 );
 
 local myService = service.createService(
@@ -28,14 +34,16 @@ local myService = service.createService(
     name: 'http',
     port: appPort,
     targetPort: appPort,
-  }]
+  }],
+  commonLabels + { 'app.kubernetes.io/component': 'web' }
 );
 
 local myConfigMap = configmap.createConfigMap(
   appName + '-config',
   {
     'app.properties': 'key1=value1\nkey2=value2',
-  }
+  },
+  commonLabels + { 'app.kubernetes.io/component': 'web' }
 );
 
 local mySecret = secret.createSecret(
@@ -44,7 +52,8 @@ local mySecret = secret.createSecret(
   {
     username: std.base64('admin'),
     password: std.base64('password123'),
-  }
+  },
+  commonLabels + { 'app.kubernetes.io/component': 'web' }
 );
 
 {
