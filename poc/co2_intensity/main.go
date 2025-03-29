@@ -1,13 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/ksctl/enhancements/poc/co2_intensity/climatetrace"
 	"github.com/ksctl/enhancements/poc/co2_intensity/electricitymaps"
+	"github.com/ksctl/enhancements/poc/co2_intensity/ember"
 )
 
-func climateTrace() {
+func handleClimateTrace() {
 	ct := climatetrace.DefaultClimateTrace
 
 	if v, err := ct.GetCountries(); err != nil {
@@ -23,7 +25,7 @@ func climateTrace() {
 	}
 }
 
-func electricityMaps() {
+func handleElectricityMaps() {
 	em := electricitymaps.DefaultElectricityMap
 
 	if v, err := em.GetAvailableZones(); err != nil {
@@ -33,6 +35,26 @@ func electricityMaps() {
 	}
 
 	if v, err := em.GetMonthlyPastData("IN-EA"); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
+	}
+	if v, err := em.GetMonthlyPastData("IN-SO"); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
+	}
+	if v, err := em.GetMonthlyPastData("IN-WE"); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
+	}
+	if v, err := em.GetMonthlyPastData("IN-NE"); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
+	}
+	if v, err := em.GetMonthlyPastData("IN-NO"); err != nil {
 		log.Fatal(err)
 	} else {
 		v.S()
@@ -51,7 +73,24 @@ func electricityMaps() {
 	}
 }
 
+func handleEmber() {
+	e := ember.DefaultEmber
+
+	if v, err := e.GetCountries(); err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Println(v)
+	}
+
+	if v, err := e.GetMonthlyCo2Intensity("IND"); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
+	}
+}
+
 func main() {
-	// climateTrace()
-	electricityMaps()
+	// handleClimateTrace()
+	handleElectricityMaps()
+	// handleEmber()
 }
