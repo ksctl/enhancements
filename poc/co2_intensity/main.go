@@ -1,96 +1,57 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
-	"net/http"
 
-	"github.com/gookit/goutil/dump"
+	"github.com/ksctl/enhancements/poc/co2_intensity/climatetrace"
+	"github.com/ksctl/enhancements/poc/co2_intensity/electricitymaps"
 )
 
-type Country struct {
-	Name      string `json:"name"`
-	Continent string `json:"continent"`
-	Code      string `json:"alpha3"`
+func climateTrace() {
+	ct := climatetrace.DefaultClimateTrace
+
+	if v, err := ct.GetCountries(); err != nil {
+		log.Fatal(err)
+	} else {
+		v.P()
+	}
+
+	if v, err := ct.GetEmissionSummaryHistroy(); err != nil {
+		log.Fatal(err)
+	} else {
+		v.P()
+	}
 }
 
-type Countries []Country
+func electricityMaps() {
+	em := electricitymaps.DefaultElectricityMap
 
-func getCountries() (Countries, error) {
-	url := "https://api.climatetrace.org/v6/definitions/countries"
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
+	if v, err := em.GetAvailableZones(); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
 	}
 
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
+	if v, err := em.GetMonthlyPastData("IN-EA"); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
 	}
 
-	defer res.Body.Close()
-	countries := Countries{}
-	if err := json.NewDecoder(res.Body).Decode(&countries); err != nil {
-		return nil, err
+	if v, err := em.GetLatestCarbonIntensity("IN-EA", electricitymaps.OptionEmissionFactorType("direct")); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
 	}
 
-	return countries, nil
-}
-
-type Emissions struct {
-	CO2       float64 `json:"co2"`
-	CH4       float64 `json:"ch4"`
-	N2O       float64 `json:"n2o"`
-	CO2E100yr float64 `json:"co2e_100yr"`
-	CO2E20yr  float64 `json:"co2e_20yr"`
-}
-
-type CountryEmission struct {
-	Country      string    `json:"country"`
-	Continent    *string   `json:"continent"`
-	Rank         int       `json:"rank"`
-	PreviousRank int       `json:"previousRank"`
-	AssetCount   *int      `json:"assetCount"`
-	Emissions    Emissions `json:"emissions"`
-	// WorldEmissions  Emissions `json:"worldEmissions"`
-	EmissionsChange Emissions `json:"emissionsChange"`
-}
-
-type CountriesEmission []CountryEmission
-
-func getEmissionSummaryHistroy() (CountriesEmission, error) {
-	url := "https://api.climatetrace.org/v6/country/emissions?since=2023&to=2024&countries=IND,FIN"
-
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return nil, err
+	if v, err := em.GetCarbonIntensityHistory("IN-EA", electricitymaps.OptionEmissionFactorType("direct")); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
 	}
-
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	defer res.Body.Close()
-	countriesEmission := CountriesEmission{}
-	if err := json.NewDecoder(res.Body).Decode(&countriesEmission); err != nil {
-		return nil, err
-	}
-
-	return countriesEmission, nil
 }
 
 func main() {
-	if v, err := getCountries(); err != nil {
-		log.Fatal(err)
-	} else {
-		dump.P(v)
-	}
-
-	if v, err := getEmissionSummaryHistroy(); err != nil {
-		log.Fatal(err)
-	} else {
-		dump.P(v)
-	}
+	// climateTrace()
+	electricityMaps()
 }
