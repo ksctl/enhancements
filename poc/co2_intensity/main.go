@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"github.com/ksctl/enhancements/poc/co2_intensity/embodded_greensoftware"
 	"log"
 
 	"github.com/ksctl/enhancements/poc/co2_intensity/climatetrace"
+	"github.com/ksctl/enhancements/poc/co2_intensity/climatiq"
 	"github.com/ksctl/enhancements/poc/co2_intensity/electricitymaps"
 	"github.com/ksctl/enhancements/poc/co2_intensity/ember"
 )
@@ -89,8 +91,32 @@ func handleEmber() {
 	}
 }
 
+func handleEmboddiedCarbonByClimatiq() {
+	ec := climatiq.DefaultClimatiq
+	_ = ec
+
+	//if v, err := ec.GetMetadata(); err != nil {
+	//	log.Fatal(err)
+	//} else {
+	//	v.P()
+	//}
+
+	//if err := ec.GetDataBasedProvider(""); err != nil {
+	//	log.Fatal(err)
+	//} else {
+	//	fmt.Println("Data based provider fetched successfully")
+	//}
+
+	if v, err := embodded_greensoftware.GetEmboddedCo2Emissions(); err != nil {
+		log.Fatal(err)
+	} else {
+		v.S()
+	}
+}
+
 func main() {
 	// handleClimateTrace()
-	handleElectricityMaps()
+	// handleElectricityMaps()
 	// handleEmber()
+	handleEmboddiedCarbonByClimatiq()
 }
