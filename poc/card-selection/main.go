@@ -34,11 +34,11 @@ type Model struct {
 }
 
 type keyMap struct {
-	left    key.Binding
-	right   key.Binding
-	_select key.Binding
-	quit    key.Binding
-	help    key.Binding
+	left     key.Binding
+	right    key.Binding
+	selected key.Binding
+	quit     key.Binding
+	help     key.Binding
 }
 
 func (k keyMap) ShortHelp() []key.Binding {
@@ -47,7 +47,7 @@ func (k keyMap) ShortHelp() []key.Binding {
 
 func (k keyMap) FullHelp() [][]key.Binding {
 	return [][]key.Binding{
-		{k.left, k.right, k._select},
+		{k.left, k.right, k.selected},
 		{k.help, k.quit},
 	}
 }
@@ -62,7 +62,7 @@ func newKeyMap() keyMap {
 			key.WithKeys("right", "l"),
 			key.WithHelp("→/l", "next plan"),
 		),
-		_select: key.NewBinding(
+		selected: key.NewBinding(
 			key.WithKeys("enter", " "),
 			key.WithHelp("enter/space", "select plan"),
 		),
@@ -170,7 +170,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return m, nil
 
-		case key.Matches(msg, m.keys._select):
+		case key.Matches(msg, m.keys.selected):
 			// Select current plan
 			m.selectedPlan = m.currentPlan
 			return m, tea.Quit
@@ -312,6 +312,7 @@ func (m Model) View() string {
 }
 
 func main() {
+	fmt.Println("Welcome to the Pricing Plan Selection!")
 	model := newModel()
 	p := tea.NewProgram(model, tea.WithAltScreen())
 
